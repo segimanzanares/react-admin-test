@@ -17,6 +17,7 @@ class Main extends Component {
         };
     }
   render() {
+    document.getElementsByTagName('body')[0].classList = ['sidebar-mini', 'layout-fixed'];
     return (
       <div>
         <Header />
