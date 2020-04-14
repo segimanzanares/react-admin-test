@@ -1,5 +1,5 @@
-import React, {Component, useState} from 'react';
-import { Dropdown, FormControl } from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Dropdown } from 'react-bootstrap';
 
 export default class Header extends Component {
     render() {
@@ -14,15 +14,11 @@ export default class Header extends Component {
         ));
         const CustomMenu = React.forwardRef(
             ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
-              const [value, setValue] = useState('');
-              return (
-                <ul ref={ref} style={style} className={className} aria-labelledby={labeledBy}>
-                    {React.Children.toArray(children).filter(
-                      (child) =>
-                        !value || child.props.children.toLowerCase().startsWith(value),
-                    )}
-                </ul>
-              );
+                return (
+                    <ul ref={ref} style={style} className={className} aria-labelledby={labeledBy}>
+                        {React.Children.toArray(children)}
+                    </ul>
+                );
             },
         );
         return (
@@ -35,12 +31,12 @@ export default class Header extends Component {
                 <div className="navbar-nav ml-auto">
                     <Dropdown className="nav-item user-menu">
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                            <img src="/avatar.png" className="user-image img-circle elevation-2" alt="User Image"/>
+                            <img src="/avatar.png" className="user-image img-circle elevation-2" alt="User"/>
                             <span className="d-none d-md-inline mr-2">Segi Manzanares</span>
                         </Dropdown.Toggle>
                         <Dropdown.Menu as={CustomMenu} className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <li className="user-header bg-primary">
-                                <img src="/avatar.png" className="img-circle elevation-2" alt="User Image"/>
+                                <img src="/avatar.png" className="img-circle elevation-2" alt="User"/>
                                 <p>
                                     Segi Manzanares
                                     <small>Miembro desde 2020</small>
