@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 //import Sidebar from './Sidebar';
 import Main from './Main';
 import Login from '../views/auth/Login';
+import auth from '../auth';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
     Redirect,
-    useHistory,
     useLocation
 } from "react-router-dom";
 
@@ -43,20 +42,6 @@ const routes = [
         ]
     }
 ];
-
-const fakeAuth = {
-    isAuthenticated: () => {
-        return localStorage.getItem('isAuthenticated') == 1;
-    },
-    authenticate(cb) {
-        localStorage.setItem('isAuthenticated', 1);
-        setTimeout(cb, 100); // fake async
-    },
-    signout(cb) {
-        localStorage.setItem('isAuthenticated', 0);
-        setTimeout(cb, 100);
-    }
-};
 
 class App extends Component {
 
@@ -96,7 +81,7 @@ function SecureInnerRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={({ location }) =>
-                fakeAuth.isAuthenticated() ? (
+                auth.isAuthenticated() ? (
                   <Redirect
                     to={{
                       pathname: "/home"
@@ -115,7 +100,7 @@ function PrivateRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={({ location }) =>
-                fakeAuth.isAuthenticated() ? (
+                auth.isAuthenticated() ? (
                   children
                 ) : (
                   <Redirect

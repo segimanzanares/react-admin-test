@@ -1,98 +1,111 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
+import { useForm } from 'react-hook-form';
 import auth from '../../auth';
 import {
-    Redirect
+    useHistory,
+    useLocation
 } from "react-router-dom";
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            authenticated: false
-        };
-    }
-
-    login() {
-        auth.login();
-        this.setState({
-            authenticated: true
+export default function Login() {
+    const { register, handleSubmit, errors, setError } = useForm();
+    let history = useHistory();
+    let location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
+    const [errorMessage, setErrorMessage] = useState(null);
+    const login = function(data) {
+        auth.login({
+            username: data.email,
+            password: data.password,
+            remember: data.rememberMe
+        }, () => history.replace(from), (error) => {
+            if (error.status === 401) {
+                setErrorMessage(error.data.message);
+            }
+            else if (error.status === 422) {
+                setErrorMessage(error.data.message);
+                for (var key in error.data.errors) {
+                    if (error.data.errors.hasOwnProperty(key)) {
+                        setError(key, 'validate', error.data.errors[key]);
+                    }
+                }
+            }
         });
     }
-    
-    render() {
-        document.getElementsByTagName('body')[0].classList = ['login-page'];
-        return !this.state.authenticated ? (
-            <div className="login-box">
-                <div className="login-logo">
-                    <img src="/logo192.png" alt="Logo" />
-                </div>
-                <div className="card">
-                    <div className="card-body login-card-body">
-                        <p className="login-box-msg">Sign in to start your session</p>
+    document.getElementsByTagName('body')[0].classList = ['login-page'];
+    return (
+        <div className="login-box">
+            <div className="login-logo">
+                <img src="/logo192.png" alt="Logo" />
+            </div>
+            <div className="card">
+                <div className="card-body login-card-body">
+                    <p className="login-box-msg">Sign in to start your session</p>
+                    {
+                        errorMessage && 
                         <div className="alert alert-danger">
-                            <strong>error</strong>
+                            <strong>{errorMessage}</strong>
                         </div>
-                        <form ref="form">
-                            <div className="form-group">
-                                <label>E-mail</label>
-                                <div className="input-group mb-3">
-                                    <input type="email" className="form-control" name="email" 
-                                           v-model="email" required autoFocus
-                                           v-bind-classNName="{ 'is-invalid': errors.email }" />
-                                    <div className="input-group-append">
-                                        <div className="input-group-text">
-                                            <span className="fas fa-envelope"></span>
-                                        </div>
-                                    </div>
-                                    <span className="invalid-feedback" role="alert" v-if="errors.email !== null">
-                                        <strong v-for="msg in errors.email">msg</strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label>Password</label>
-                                <div className="input-group mb-3">
-                                    <input type="password" className="form-control" 
-                                           name="password" v-model="password" required
-                                           v-bind-classNName="{ 'is-invalid': errors.password }" />
-                                    <div className="input-group-append">
-                                        <div className="input-group-text">
-                                            <span className="fas fa-lock"></span>
-                                        </div>
-                                    </div>
-                                    <span className="invalid-feedback" role="alert" v-if="errors.password !== null">
-                                        <strong v-for="msg in errors.password">msg</strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-8">
-                                    <div className="icheck-primary">
-                                        <input type="checkbox" id="remember" v-model="remember" />
-                                        <label htmlFor="remember">
-                                            Remember Me
-                                        </label>
+                    }
+                    <form onSubmit={handleSubmit(login)}>
+                        <div className="form-group">
+                            <label>E-mail</label>
+                            <div className="input-group mb-3">
+                                <input type="text" name="email" autoFocus
+                                       ref={register({ required: true })}
+                                       className={ 'form-control ' + (errors.email ? 'is-invalid' : '') } />
+                                <div className="input-group-append">
+                                    <div className="input-group-text">
+                                        <span className="fas fa-envelope"></span>
                                     </div>
                                 </div>
-                                <div className="col-4">
-                                    <button type="button" className="btn btn-primary btn-block" onClick={() => this.login()}>Login</button>
+                                {
+                                    errors.email && errors.email.type === 'required' && 
+                                    <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
+                                }
+                                {
+                                    errors.email && errors.email.type === 'validate' && 
+                                    <span className="invalid-feedback" role="alert"><strong>{errors.email.message}</strong></span>
+                                }
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label>Password</label>
+                            <div className="input-group mb-3">
+                                <input type="password" name="password"
+                                       ref={register({ required: true })}
+                                       className={ 'form-control ' + (errors.password ? 'is-invalid' : '') } />
+                                <div className="input-group-append">
+                                    <div className="input-group-text">
+                                        <span className="fas fa-lock"></span>
+                                    </div>
+                                </div>
+                                {
+                                    errors.password && errors.password.type === 'required' && 
+                                    <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
+                                }
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-8">
+                                <div className="icheck-primary">
+                                    <input type="checkbox" id="remember" name="rememberMe" ref={register} />
+                                    <label htmlFor="remember">
+                                        Remember Me
+                                    </label>
                                 </div>
                             </div>
-                            <p className="mb-1">
-                                <router-link to="/password/reset">
-                                    I forgot my password
-                                </router-link>
-                            </p>
-                        </form>
-                    </div>
+                            <div className="col-4">
+                                <button type="submit" className="btn btn-primary btn-block">Login</button>
+                            </div>
+                        </div>
+                        <p className="mb-1">
+                            <router-link to="/password/reset">
+                                I forgot my password
+                            </router-link>
+                        </p>
+                    </form>
                 </div>
             </div>
-        ) : (
-            <Redirect
-                to={{
-                  pathname: "/home"
-                }}
-              />
-        );
-    }
+        </div>
+    );
 }

@@ -5,6 +5,8 @@ import './index.scss';
 window.$ = window.jQuery = require('jquery');
 require('../node_modules/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js');
 window.adminlte = require('admin-lte');
+window._ = require('lodash');
+//window.axios = require('axios');
 
 ReactDOM.render(
     <App />,

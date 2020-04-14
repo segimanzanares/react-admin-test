@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import {
-    BrowserRouter as Router,
     Switch,
-    Route,
-    Link,
-    useRouteMatch
+    Route
 } from "react-router-dom";
 
 class Main extends Component {
