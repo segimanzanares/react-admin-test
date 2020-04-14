@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import auth from '../../auth';
-import {
-    useHistory,
-    useLocation
-} from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 export default function Login() {
     const { register, handleSubmit, errors, setError } = useForm();

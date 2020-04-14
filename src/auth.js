@@ -29,7 +29,16 @@ export default {
             }
         });
     },
-    logout(cb) {
-        localStorage.setItem('isAuthenticated', 0);
+    logout(onLogout) {
+        api('delete', '/oauth/token', {}, {
+            onResponse: () => {
+                localStorage.setItem('isAuthenticated', 0);
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('session_data');
+                if (onLogout) {
+                    onLogout();
+                }
+            }
+        });
     }
 }
