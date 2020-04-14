@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Main from './Main';
 import Login from '../views/auth/Login';
 import auth from '../auth';
+import api from '../api';
 import {
     BrowserRouter as Router,
     Switch,

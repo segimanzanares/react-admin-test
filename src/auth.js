@@ -16,7 +16,7 @@ export default {
             onSuccess: (response) => {
                 localStorage.setItem('isAuthenticated', 1);
                 localStorage.setItem('session_data', JSON.stringify(response.data));
-                axios.defaults.headers.common['Authentication'] = response.data.token_type 
+                axios.defaults.headers.common['Authorization'] = response.data.token_type 
                         + ' ' + response.data.access_token;
                 if (onLogin) {
                     onLogin();

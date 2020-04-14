@@ -4,6 +4,9 @@ import axios from 'axios';
 const apiBaseUrl = process.env.REACT_APP_API_URL;
 
 export default function (method, url, data, config) {
+    if (data === void 0) {
+        data = {};
+    }
     if (config === void 0) {
         config = {};
     }
