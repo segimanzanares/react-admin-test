@@ -16,7 +16,7 @@ const Login = (props) => {
         if (isAuthenticated) {
             props.history.push('/home');
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, props.history])
 
     const dispatch = useDispatch()
     const { register, handleSubmit, errors, setError } = useForm();
