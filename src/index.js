@@ -10,6 +10,7 @@ window.$ = window.jQuery = require('jquery');
 require('../node_modules/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js');
 window.adminlte = require('admin-lte');
 window._ = require('lodash');
+window.toastr = require('toastr');
 
 const store = configureStore();
 
