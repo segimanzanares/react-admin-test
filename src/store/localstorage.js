@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 export const loadState = () => {
     try {
@@ -6,6 +7,7 @@ export const loadState = () => {
             return undefined
         }
         let auth = JSON.parse(serializedData)
+        axios.defaults.headers.common['Authorization'] = auth.auth.token_type + ' ' + auth.auth.access_token;
         return { auth }
     } catch (error) {
         return undefined
