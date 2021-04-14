@@ -1,30 +1,29 @@
-import React, { Component, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Dropdown, Modal, Button } from 'react-bootstrap';
 import { useHistory, useLocation } from "react-router-dom";
-import auth from '../auth';
+import { useDispatch } from 'react-redux';
 import UserForm from '../views/users/Form';
+import { logout as logoutAction } from '../actions/auth';
 
 export default function Header() {
+    const dispatch = useDispatch()
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const handleSave = () => {
-        //setShow(true);
-        //console.log(child);
-    }
     const history = useHistory();
     const location = useLocation();
     const { from } = location.state || { from: { pathname: "/login" } };
-    const logout = function() {
-        auth.logout(() => history.replace(from))
+    const logout = function () {
+        dispatch(logoutAction());
+        history.replace(from);
     }
     const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
         <a className="nav-link" role="button" href="#" ref={ref}
-               onClick={(e) => {
-                   e.preventDefault();
-                   onClick(e);
-               }}>
-          {children}
+            onClick={(e) => {
+                e.preventDefault();
+                onClick(e);
+            }}>
+            {children}
         </a>
     ));
     const CustomMenu = React.forwardRef(
@@ -36,7 +35,7 @@ export default function Header() {
             );
         },
     );
-    //
+
     return (
         <>
             <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -48,12 +47,12 @@ export default function Header() {
                 <div className="navbar-nav ml-auto">
                     <Dropdown className="nav-item user-menu">
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                            <img src="/avatar.png" className="user-image img-circle elevation-2" alt="User"/>
+                            <img src="/avatar.png" className="user-image img-circle elevation-2" alt="User" />
                             <span className="d-none d-md-inline mr-2">Segi Manzanares</span>
                         </Dropdown.Toggle>
                         <Dropdown.Menu as={CustomMenu} className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <li className="user-header bg-primary">
-                                <img src="/avatar.png" className="img-circle elevation-2" alt="User"/>
+                                <img src="/avatar.png" className="img-circle elevation-2" alt="User" />
                                 <p>
                                     Segi Manzanares
                                     <small>Miembro desde 2020</small>
@@ -61,15 +60,15 @@ export default function Header() {
                             </li>
                             <li className="user-footer">
                                 <a href="#" className="btn btn-default btn-flat"
-                                       onClick={(e) => {
-                                           e.preventDefault();
-                                           handleShow();
-                                       }}>Profile</a>
-                                <a href="#" className="btn btn-default btn-flat float-right" 
-                                       onClick={(e) => {
-                                           e.preventDefault();
-                                           logout();
-                                       }}>Logout</a>
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleShow();
+                                    }}>Profile</a>
+                                <a href="#" className="btn btn-default btn-flat float-right"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        logout();
+                                    }}>Logout</a>
                             </li>
                         </Dropdown.Menu>
                     </Dropdown>
@@ -80,7 +79,7 @@ export default function Header() {
                     <Modal.Title>Datos del perfil</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <UserForm id="profileForm"/>
+                    <UserForm id="profileForm" />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" type="submit" form="profileForm">

@@ -3,9 +3,6 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGOUT,
-    RECEIVE_POSTS,
-    FETCH_POSTS_ERROR,
-    RESET_ERROR
 } from '../actions';
 
 import axios from 'axios';

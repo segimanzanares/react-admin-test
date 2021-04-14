@@ -1,4 +1,3 @@
-//import fetch from 'cross-fetch'
 import api from '../api';
 
 export const LOGIN = 'LOGIN'
@@ -51,10 +50,9 @@ export function loginError(error) {
     }
 }
 
-export function logout(subreddit) {
+export function logout() {
     return {
         type: LOGOUT,
-        subreddit
     }
 }
 /*
