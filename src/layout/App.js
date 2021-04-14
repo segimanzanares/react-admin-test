@@ -69,7 +69,7 @@ class App extends Component {
 
 function SecureInnerRoute({ children, ...rest }) {
     const isAuthenticated = useSelector(store => {
-        return store.authReducer.isAuthenticated;
+        return store.auth.isAuthenticated;
     });
     return (
         <Route {...rest}
@@ -89,7 +89,7 @@ function SecureInnerRoute({ children, ...rest }) {
 
 function PrivateRoute({ children, ...rest }) {
     const isAuthenticated = useSelector(store => {
-        return store.authReducer.isAuthenticated;
+        return store.auth.isAuthenticated;
     });
     return (
         <Route {...rest}

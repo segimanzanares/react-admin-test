@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import auth from '../../auth';
 import { useHistory, useLocation, withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import { performLogin } from '../../actions/auth';
@@ -8,7 +7,7 @@ import { performLogin } from '../../actions/auth';
 const Login = (props) => {
     const isAuthenticated = useSelector(store => {
         console.log(store);
-        return store.authReducer.isAuthenticated;
+        return store.auth.isAuthenticated;
     })
 
     React.useEffect(() => {

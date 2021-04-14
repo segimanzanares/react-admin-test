@@ -6,7 +6,7 @@ export const loadState = () => {
             return undefined
         }
         let auth = JSON.parse(serializedData)
-        return { authReducer: auth }
+        return { auth }
     } catch (error) {
         return undefined
     }
@@ -14,7 +14,7 @@ export const loadState = () => {
 
 export const saveState = (state) => {
     try {
-        let serializedData = JSON.stringify(state.authReducer)
+        let serializedData = JSON.stringify(state.auth)
         localStorage.setItem('session', serializedData)
     } catch (error) {
         console.log(error)
