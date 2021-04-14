@@ -1,16 +1,32 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import auth from '../../auth';
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, withRouter } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
+import { performLogin } from '../../actions/auth';
 
-export default function Login() {
+const Login = (props) => {
+    const isAuthenticated = useSelector(store => {
+        console.log(store);
+        return store.authReducer.isAuthenticated;
+    })
+
+    React.useEffect(() => {
+        console.log(isAuthenticated)
+        if (isAuthenticated) {
+            props.history.push('/home');
+        }
+    }, [isAuthenticated])
+
+    const dispatch = useDispatch()
     const { register, handleSubmit, errors, setError } = useForm();
     let history = useHistory();
     let location = useLocation();
     let { from } = location.state || { from: { pathname: "/" } };
     const [errorMessage, setErrorMessage] = useState(null);
-    const login = function(data) {
-        auth.login({
+    const login = function (data) {
+        dispatch(performLogin(data.email, data.password));
+        /*auth.login({
             username: data.email,
             password: data.password,
             remember: data.rememberMe
@@ -26,7 +42,7 @@ export default function Login() {
                     }
                 }
             }
-        });
+        });*/
     }
     document.getElementsByTagName('body')[0].classList = ['login-page'];
     return (
@@ -36,9 +52,9 @@ export default function Login() {
             </div>
             <div className="card">
                 <div className="card-body login-card-body">
-                    <p className="login-box-msg">Sign in to start your session</p>
+                    <p className="login-box-msg">Iniciar sesión</p>
                     {
-                        errorMessage && 
+                        errorMessage &&
                         <div className="alert alert-danger">
                             <strong>{errorMessage}</strong>
                         </div>
@@ -48,19 +64,19 @@ export default function Login() {
                             <label>E-mail</label>
                             <div className="input-group mb-3">
                                 <input type="text" name="email" autoFocus
-                                       ref={register({ required: true })}
-                                       className={ 'form-control ' + (errors.email ? 'is-invalid' : '') } />
+                                    ref={register({ required: true })}
+                                    className={'form-control ' + (errors.email ? 'is-invalid' : '')} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-envelope"></span>
                                     </div>
                                 </div>
                                 {
-                                    errors.email && errors.email.type === 'required' && 
+                                    errors.email && errors.email.type === 'required' &&
                                     <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
                                 }
                                 {
-                                    errors.email && errors.email.type === 'validate' && 
+                                    errors.email && errors.email.type === 'validate' &&
                                     <span className="invalid-feedback" role="alert"><strong>{errors.email.message}</strong></span>
                                 }
                             </div>
@@ -69,15 +85,15 @@ export default function Login() {
                             <label>Password</label>
                             <div className="input-group mb-3">
                                 <input type="password" name="password"
-                                       ref={register({ required: true })}
-                                       className={ 'form-control ' + (errors.password ? 'is-invalid' : '') } />
+                                    ref={register({ required: true })}
+                                    className={'form-control ' + (errors.password ? 'is-invalid' : '')} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock"></span>
                                     </div>
                                 </div>
                                 {
-                                    errors.password && errors.password.type === 'required' && 
+                                    errors.password && errors.password.type === 'required' &&
                                     <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
                                 }
                             </div>
@@ -95,14 +111,11 @@ export default function Login() {
                                 <button type="submit" className="btn btn-primary btn-block">Login</button>
                             </div>
                         </div>
-                        <p className="mb-1">
-                            <router-link to="/password/reset">
-                                I forgot my password
-                            </router-link>
-                        </p>
                     </form>
                 </div>
             </div>
         </div>
     );
 }
+
+export default withRouter(Login)
