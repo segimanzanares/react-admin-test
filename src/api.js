@@ -13,7 +13,7 @@ export default function (method, url, data, config) {
     var options = {};
     if (config.headers !== void 0) {
         options.headers = config.headers;
-        if (method === 'put' && options.headers.hasOwnProperty('Content-Type') 
+        if (method === 'put' && options.headers.hasOwnProperty('Content-Type')
                 && options.headers['Content-Type'] === 'multipart/form-data') {
             method = 'post';
             if (data instanceof FormData) {
@@ -21,40 +21,43 @@ export default function (method, url, data, config) {
             }
         }
     }
-    axios[method](apiBaseUrl + url, data, options)
-    .then(function(response) {
-        if (!_.isNil(response.data.message)) {
-            //toastr['success'](response.data.message);
-        }
-        if (config.onSuccess !== void 0) {
-            if (_.isFunction(config.onSuccess)) {
-                config.onSuccess(response);
-            }
-        }
-    })
-    .catch(function(error) {
-        if (error.response.status === 422) {
-            for (var key in error.response.data.errors) {
-                if (error.response.data.errors.hasOwnProperty(key)) {
-                    //vm.$set(vm.errors, key, error.response.data.errors[key]);
+    return axios[method](apiBaseUrl + url, data, options)
+        .then(response => response)
+        .catch(error => {
+            if (error.response.status === 422) {
+                for (var key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        //vm.$set(vm.errors, key, error.response.data.errors[key]);
+                    }
                 }
+                //toastr['error']("Algunos datos son incorrectos.");
             }
-            //toastr['error']("Algunos datos son incorrectos.");
-        }
-        else {
-            //toastr['error'](error.response.data.message);
-        }
-        if (config.onError !== void 0) {
-            if (_.isFunction(config.onError)) {
-                config.onError(error);
+            else {
+                //toastr['error'](error.response.data.message);
             }
-        }
-    })
-    .then(function() {
-        if (config.onResponse !== void 0) {
-            if (_.isFunction(config.onResponse)) {
-                config.onResponse();
+            /*if (error.status === 401 && this && this.router) {
+                this.storage.removeItem('app-token');
+                this.router.navigate(['login']);
             }
-        }
-    });
-}
+            else if (error.status === 403) {
+                this.toastr.error(error.error.message, '', {
+                    timeOut: 10000
+                });
+                this.router.navigate(['home']);
+            }
+            else if (error.status === 429) {
+                this.toastr.error("Se excedió el límite de peticiones al API. Vuelva a intentarlo en 1 minuto.", '', {
+                    timeOut: 10000
+                });
+            }
+            else if (error.status === 500) {
+                let msg = "An error occurred on the server when your request was being processed, we will solve the problem as soon as possible.";
+                this.translate.get(msg, {}).subscribe((trans) => {
+                    this.toastr.error(trans, '', {
+                        timeOut: 10000
+                    });
+                });
+            }*/
+            return Promise.reject(error);
+        });
+    }
