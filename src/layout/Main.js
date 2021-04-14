@@ -1,46 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import {
-    Switch,
-    Route
-} from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
-class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            routes: []
-        };
-    }
-  render() {
+
+export default function Main(props) {
     document.getElementsByTagName('body')[0].classList = ['sidebar-mini', 'layout-fixed'];
     return (
-      <div>
-        <Header />
-        <Sidebar />
-        <div className="content-wrapper">
-            <Switch>
-                {this.props.routes.map((route, i) => (
-                  <RouteWithSubRoutes key={i} {...route} />
-                ))}
-            </Switch>
+        <div>
+            <Header />
+            <Sidebar />
+            <div className="content-wrapper">
+                <Switch>
+                    {props.routes.map((route, i) => (
+                        <RouteWithSubRoutes key={i} {...route} />
+                    ))}
+                </Switch>
+            </div>
         </div>
-      </div>
     );
-  }
 };
 
 function RouteWithSubRoutes(route) {
     return (
-      <Route
-        path={route.path}
-        render={props => (
-          // pass the sub-routes down to keep nesting
-          <route.component {...props} routes={route.routes} />
-        )}
-      />
+        <Route path={route.path}
+            render={props => (
+                <route.component {...props} routes={route.routes} />
+            )}
+        />
     );
 }
-
-export default Main;
