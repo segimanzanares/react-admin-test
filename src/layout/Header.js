@@ -3,7 +3,7 @@ import { Dropdown, Modal, Button } from 'react-bootstrap';
 import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import UserForm from '../views/users/Form';
-import { logout as logoutAction } from '../actions/auth';
+import { logout as logoutAction, clearError } from '../actions/auth';
 
 export default function Header() {
     const dispatch = useDispatch()
@@ -15,7 +15,10 @@ export default function Header() {
         setUserData(user);
     }, [user]);
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        dispatch(clearError());
+        setShow(false);
+    }
     const handleShow = () => setShow(true);
     const history = useHistory();
     const location = useLocation();
@@ -87,7 +90,7 @@ export default function Header() {
                     <Modal.Title>Datos del perfil</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <UserForm id="profileForm" />
+                    <UserForm id="profileForm" userData={userData} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" type="submit" form="profileForm">

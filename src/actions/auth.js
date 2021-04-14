@@ -4,9 +4,10 @@ export const LOGIN = 'LOGIN'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_ERROR = 'LOGIN_ERROR'
 export const LOGOUT = 'LOGOUT'
-export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-export const FETCH_POSTS_ERROR = 'FETCH_POSTS_ERROR'
-export const RESET_ERROR = 'RESET_ERROR'
+export const UPDATE_PROFILE = 'UPDATE_PROFILE'
+export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS'
+export const UPDATE_PROFILE_ERROR = 'UPDATE_PROFILE_ERROR'
+export const CLEAR_ERROR = 'CLEAR_ERROR'
 
 export function login(email, password, redirect) {
     return {
@@ -55,6 +56,48 @@ export function logout() {
         type: LOGOUT,
     }
 }
+
+export function updateProfile(userData) {
+    return {
+        type: UPDATE_PROFILE,
+        userData
+    }
+}
+
+export function performUpdateProfile(userData) {
+    return dispatch => {
+        dispatch(updateProfile(userData));
+        return api('put', '/users/me', userData)
+            .then(response => {
+                console.log(response.data);
+                return response;
+            })
+            .then(response => dispatch(updateProfileSuccess(response.data.data)))
+            .catch(err => dispatch(updateProfileError(err)))
+    }
+}
+
+export function updateProfileSuccess(updatedUser) {
+    window.toastr['success']("Perfil actualizado satisfactoriamente!");
+    return {
+        type: UPDATE_PROFILE_SUCCESS,
+        updatedUser
+    }
+}
+
+export function updateProfileError(error) {
+    return {
+        type: UPDATE_PROFILE_ERROR,
+        error
+    }
+}
+
+export function clearError() {
+    return {
+        type: CLEAR_ERROR,
+    }
+}
+
 /*
 export function requestPosts(subreddit) {
     return {
