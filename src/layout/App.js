@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-//import Header from './Header';
-//import Sidebar from './Sidebar';
 import Main from './Main';
 import Login from '../views/auth/Login';
-import auth from '../auth';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Redirect,
-    useLocation
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect, useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const routes = [
     {
@@ -44,7 +36,6 @@ const routes = [
 ];
 
 class App extends Component {
-
     render() {
         return (
             <Router>
@@ -77,18 +68,19 @@ class App extends Component {
 }
 
 function SecureInnerRoute({ children, ...rest }) {
+    const isAuthenticated = useSelector(store => {
+        return store.authReducer.isAuthenticated;
+    });
     return (
-        <Route
-            {...rest}
+        <Route {...rest}
             render={({ location }) =>
-                auth.isAuthenticated() ? (
-                  <Redirect
-                    to={{
-                      pathname: "/home"
-                    }}
-                  />
+                isAuthenticated ? (
+                    <Redirect to={{
+                            pathname: "/home"
+                        }}
+                    />
                 ) : (
-                  children
+                    children
                 )
             }
         />
@@ -96,19 +88,20 @@ function SecureInnerRoute({ children, ...rest }) {
 }
 
 function PrivateRoute({ children, ...rest }) {
+    const isAuthenticated = useSelector(store => {
+        return store.authReducer.isAuthenticated;
+    });
     return (
-        <Route
-            {...rest}
+        <Route {...rest}
             render={({ location }) =>
-                auth.isAuthenticated() ? (
-                  children
+                isAuthenticated ? (
+                    children
                 ) : (
-                  <Redirect
-                    to={{
-                      pathname: "/login",
-                      state: { from: location }
-                    }}
-                  />
+                    <Redirect to={{
+                          pathname: "/login",
+                          state: { from: location }
+                        }}
+                    />
                 )
             }
         />
@@ -116,15 +109,13 @@ function PrivateRoute({ children, ...rest }) {
 }
 
 function RouteWithSubRoutes(route) {
-  return (
-    <Route
-      path={route.path}
-      render={props => (
-        // pass the sub-routes down to keep nesting
-        <route.component {...props} routes={route.routes} />
-      )}
-    />
-  );
+    return (
+        <Route path={route.path}
+            render={props => (
+                <route.component {...props} routes={route.routes} />
+            )}
+        />
+    );
 }
 
 function Home() {
@@ -145,15 +136,12 @@ function Home() {
 }
 
 function NoMatch() {
-  let location = useLocation();
-
-  return (
-    <div>
-      <h3>
-        No match for <code>{location.pathname}</code>
-      </h3>
-    </div>
-  );
+    let location = useLocation();
+    return (
+        <div>
+            <h3>No match for <code>{location.pathname}</code></h3>
+        </div>
+    );
 }
 
 export default App;
