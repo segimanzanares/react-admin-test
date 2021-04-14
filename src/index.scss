@@ -4,3 +4,7 @@
 @import '~@fortawesome/fontawesome-free/css/all.css';
 // overlayscrollbars
 @import '~admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.css';
+
+.navbar-nav > .user-menu > .dropdown-menu {
+    margin: 0;
+}
