@@ -1,8 +1,8 @@
 import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import { Switch, Route } from "react-router-dom";
-
+import { Switch } from "react-router-dom";
+import RouteWithSubRoutes from '../utils/RouteWithSubRoutes';
 
 export default function Main(props) {
     document.getElementsByTagName('body')[0].classList = ['sidebar-mini', 'layout-fixed'];
@@ -20,13 +20,3 @@ export default function Main(props) {
         </div>
     );
 };
-
-function RouteWithSubRoutes(route) {
-    return (
-        <Route path={route.path}
-            render={props => (
-                <route.component {...props} routes={route.routes} />
-            )}
-        />
-    );
-}
