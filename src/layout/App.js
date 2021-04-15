@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Main from './Main';
 import Login from '../views/auth/Login';
 import { BrowserRouter as Router, Switch, Route, Redirect, useLocation } from "react-router-dom";
@@ -35,36 +35,34 @@ const routes = [
     }
 ];
 
-class App extends Component {
-    render() {
-        return (
-            <Router>
-                <Switch>
-                    {routes.map((route, i) => {
-                        if (route.secureInnerRoute) {
-                            return (
-                                <SecureInnerRoute path={route.path} key={i}>
-                                    <RouteWithSubRoutes key={i} {...route} />
-                                </SecureInnerRoute>
-                            );
-                        }
-                        else if (route.authRequired) {
-                            return (
-                                <PrivateRoute path={route.path} key={i}>
-                                    <RouteWithSubRoutes key={i} {...route} />
-                                </PrivateRoute>
-                            );
-                        }
-                        else {
-                            return (
+const App = () => {
+    return (
+        <Router>
+            <Switch>
+                {routes.map((route, i) => {
+                    if (route.secureInnerRoute) {
+                        return (
+                            <SecureInnerRoute path={route.path} key={i}>
                                 <RouteWithSubRoutes key={i} {...route} />
-                            );
-                        }
-                    })}
-                </Switch>
-            </Router>
-        );
-    }
+                            </SecureInnerRoute>
+                        );
+                    }
+                    else if (route.authRequired) {
+                        return (
+                            <PrivateRoute path={route.path} key={i}>
+                                <RouteWithSubRoutes key={i} {...route} />
+                            </PrivateRoute>
+                        );
+                    }
+                    else {
+                        return (
+                            <RouteWithSubRoutes key={i} {...route} />
+                        );
+                    }
+                })}
+            </Switch>
+        </Router>
+    );
 }
 
 function SecureInnerRoute({ children, ...rest }) {
