@@ -21,6 +21,16 @@ export default function (method, url, data, config) {
             }
         }
     }
+    if (method === 'get') {
+        if (data) {
+            url += '?';
+            Object.keys(data).forEach(key => {
+                if (data[key] !== null) {
+                    url += key + '=' + data[key] + '&';
+                }
+            });
+        }
+    }
     return axios[method](apiBaseUrl + url, data, options)
         .then(response => response)
         .catch(error => {
