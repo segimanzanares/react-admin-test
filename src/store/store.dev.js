@@ -6,14 +6,15 @@ import devtools from '../devtools'
 import { loadState, saveState } from './localstorage'
 
 const initialData = loadState();
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const configureStore = () => {
     const store = createStore(
         rootReducer,
         initialData,
-        compose(
+        composeEnhancers(
             applyMiddleware(thunk, createLogger()),
-            devtools.instrument()
+            //devtools.instrument()
         )
     )
     store.subscribe(function () {
