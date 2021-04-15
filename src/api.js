@@ -62,4 +62,4 @@ export default function (method, url, data, config) {
             }
             return Promise.reject(parsedError);
         });
-    }
+}
