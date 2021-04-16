@@ -16,8 +16,9 @@ export default function Form(props) {
     const roles = useSelector(store => {
         return store.catalogs.roles;
     })
+    const selectRole = () => setValue('role_id', props.userData.role_id)
     // Load roles
-    dispatch(loadCatalogRolesIfNeeded())
+    dispatch(loadCatalogRolesIfNeeded(selectRole))
 
     React.useEffect(() => {
         if (authError?.errors) {
@@ -38,10 +39,6 @@ export default function Form(props) {
     const { register, handleSubmit, errors, setError, setValue } = useForm({
         defaultValues: props.userData
     });
-    /*setValue('first_name', props.userData.first_name);
-    setValue('last_name', props.userData.last_name);
-    setValue('email', props.userData.email);
-    setValue('password', '');*/
     const onSubmit = function (data) {
         if (props.mode === "profile") {
             dispatch(performUpdateProfile(data));
@@ -49,16 +46,20 @@ export default function Form(props) {
         else if (props.mode === "create") {
             dispatch(performCreateUser(data));
         }
+        else if (props.mode === "edit") {
+            dispatch(performUpdateUser(data));
+        }
     }
     const { userData, closeModal, ...newProps } = props;
     return (
         <form onSubmit={handleSubmit(onSubmit)} {...newProps}>
+            {props.mode === "edit" ? <input type="hidden" name="id" ref={register()} /> : ''}
             {(['create', 'edit'].indexOf(props.mode) !== -1) ?
                 <div className="form-group">
                     <label>Rol</label>
                     <select className={'custom-select ' + (errors.role_id ? 'is-invalid' : '')} name="role_id"
                         ref={register({ required: true })}
-                        required autoFocus>
+                        autoFocus>
                         {roles.map(role => <option key={role.id} value={role.id}>{ role.name }</option>)}
                     </select>
                     {

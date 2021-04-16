@@ -69,8 +69,11 @@ const UsersList = () => {
         console.log(user);
     }
 
-    const goEditUser = () => {
-
+    const goEditUser = (user) => {
+        console.log(user);
+        setFormMode("edit")
+        setUserData(user)
+        setShowModal(true)
     }
 
     const deleteUser = () => {
@@ -134,7 +137,7 @@ const UsersList = () => {
                                                         <a href="#" className="action-link" onClick={() => toggleUserStatus(user)}>
                                                             <i className="fa fa-check"></i>
                                                         </a>
-                                                        <a href="#" className="action-link text-info" onClick={() => goEditUser(user)}>
+                                                        <a href="#" className="action-link text-info" onClick={(e) => {e.preventDefault(); goEditUser(user)}}>
                                                             <i className="fa fa-pencil-alt"></i>
                                                         </a>
                                                         <a href="#" className="action-link text-danger" onClick={() => deleteUser(user)}>

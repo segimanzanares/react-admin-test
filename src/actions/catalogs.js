@@ -16,10 +16,10 @@ export function loadCatalogRolesSuccess(data) {
     }
 }
 
-export function loadCatalogRolesIfNeeded() {
+export function loadCatalogRolesIfNeeded(callback) {
     return (dispatch, getState) => {
         if (shouldFetchCatalogRoles(getState().catalogs)) {
-            return dispatch(fetchCatalogRoles())
+            return dispatch(fetchCatalogRoles(callback))
         }
     }
 }
@@ -31,11 +31,16 @@ function shouldFetchCatalogRoles(state) {
     return false
 }
 
-export function fetchCatalogRoles() {
+export function fetchCatalogRoles(callback) {
     return dispatch => {
         dispatch(loadCatalogRoles())
         return api('get', '/catalogues/roles')
-            .then(response => dispatch(loadCatalogRolesSuccess(response.data)))
+            .then(response => {
+                dispatch(loadCatalogRolesSuccess(response.data))
+                if (callback) {
+                    callback()
+                }
+            })
             .catch(err => console.log(err))
     }
 }

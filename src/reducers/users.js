@@ -43,9 +43,9 @@ export function reducer(
         case UPDATE_USER:
             return { ...state, editingUser: action.userData, lastAction: action.type };
         case UPDATE_USER_SUCCESS:
-            let i = state.data.findIndex((u) => u.id == state.editingUser);
+            let i = state.data.findIndex((u) => u.id == state.editingUser.id);
             let data = [...state.data];
-            data[i] = state.userData;
+            data[i] = action.updatedUser;
             return { ...state, data: data, lastAction: action.type };
         case UPDATE_USER_ERROR:
             return { ...state, error: action.error, lastAction: action.type };
