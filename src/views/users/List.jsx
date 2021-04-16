@@ -1,9 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { Dropdown, Modal, Button } from 'react-bootstrap';
-import { loadUsersIfNeeded, fetchUsers, clearError } from '../../actions/users';
+import { Modal, Button } from 'react-bootstrap';
+import { loadUsersIfNeeded, fetchUsers, performDeleteUser, clearError } from '../../actions/users';
 import Paginator from '../../components/Paginator';
 import UserForm from './Form';
+import { showConfirmDialog } from '../../utils/helpers'
 
 const UsersList = () => {
     let emptyUserData = {
@@ -45,7 +46,7 @@ const UsersList = () => {
             ...options,
             page: page
         });
-        dispatch(fetchUsers({...options, page: page}))
+        dispatch(fetchUsers({ ...options, page: page }))
     }
 
     const handleCloseModal = () => {
@@ -61,7 +62,7 @@ const UsersList = () => {
     }
 
     const filter = () => {
-        dispatch(fetchUsers({...options}))
+        dispatch(fetchUsers({ ...options }))
     }
 
     const toggleUserStatus = (user) => {
@@ -70,14 +71,20 @@ const UsersList = () => {
     }
 
     const goEditUser = (user) => {
-        console.log(user);
         setFormMode("edit")
         setUserData(user)
         setShowModal(true)
     }
 
-    const deleteUser = () => {
-
+    const deleteUser = (user) => {
+        showConfirmDialog({
+            title: "Eliminar usuario",
+            msg: "¿Estas seguro de eliminar el usuario seleccionado?",
+            icon: 'question',
+            callback: function() {
+                dispatch(performDeleteUser(user.id))
+            }
+        });
     }
 
     return (
@@ -137,10 +144,10 @@ const UsersList = () => {
                                                         <a href="#" className="action-link" onClick={() => toggleUserStatus(user)}>
                                                             <i className="fa fa-check"></i>
                                                         </a>
-                                                        <a href="#" className="action-link text-info" onClick={(e) => {e.preventDefault(); goEditUser(user)}}>
+                                                        <a href="#" className="action-link text-info" onClick={(e) => { e.preventDefault(); goEditUser(user) }}>
                                                             <i className="fa fa-pencil-alt"></i>
                                                         </a>
-                                                        <a href="#" className="action-link text-danger" onClick={() => deleteUser(user)}>
+                                                        <a href="#" className="action-link text-danger" onClick={(e) => { e.preventDefault(); deleteUser(user) }}>
                                                             <i className="fa fa-trash"></i>
                                                         </a>
                                                     </div>
