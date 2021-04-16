@@ -1,14 +1,20 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { loadUsersIfNeeded, fetchUsers } from '../../actions/users';
+import Paginator from '../../components/Paginator';
 
 const UsersList = () => {
     const [options, setOptions] = useState({
         name: null,
-        email: null
+        email: null,
+        page: 1,
+        take: 20
     });
     const users = useSelector(store => {
         return store.users.data;
+    })
+    const total = useSelector(store => {
+        return store.users.total;
     })
     const dispatch = useDispatch()
     React.useEffect(() => {
@@ -22,12 +28,20 @@ const UsersList = () => {
         })
     }
 
+    const onPageChange = (page) => {
+        setOptions({
+            ...options,
+            page: page
+        });
+        dispatch(fetchUsers({...options, page: page}))
+    }
+
     const createUser = () => {
         console.log("Create user");
     }
 
     const filter = () => {
-        dispatch(fetchUsers(options))
+        dispatch(fetchUsers({...options}))
     }
 
     const toggleUserStatus = (user) => {
@@ -115,6 +129,12 @@ const UsersList = () => {
                             </table>
                             <div>
                                 <div className="d-flex justify-content-between p-2">
+                                    <Paginator collectionSize={total}
+                                        page={options.page}
+                                        pageSize={options.take}
+                                        maxSize={5}
+                                        onPageChange={onPageChange}>
+                                    </Paginator>
                                 </div>
                             </div>
                         </div>
