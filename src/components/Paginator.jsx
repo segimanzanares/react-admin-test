@@ -36,23 +36,30 @@ const Paginator = (props) => {
         items.push(<Pagination.Prev key="prev" disabled={active === 1} onClick={() => goTo('prev')}/>)
     }
     let centerPage = Math.ceil(numPages / 2)
+    let firstPageItem = active
+    if (firstPageItem + center - 1 === numPages - (maxItems - center - 1)) {
+        firstPageItem = active - 1
+    }
     for (let item = 1; item <= maxItems; item++) {
-        let numberPage = (active <= centerPage) ? active + item - 1 : item;
-        if (active <= centerPage) {
-            if (item === center + 1) {
+        let numberPage = item
+        if (numPages > maxItems) {
+            numberPage = (active <= centerPage) ? firstPageItem + item - 1 : item;
+            if (active <= centerPage) {
+                if (item === center + 1) {
+                    items.push(<Pagination.Ellipsis disabled key="ellipsis" />)
+                }
+            }
+            else if (item === center) {
                 items.push(<Pagination.Ellipsis disabled key="ellipsis" />)
             }
-        }
-        else if (item === center) {
-            items.push(<Pagination.Ellipsis disabled key="ellipsis" />)
-        }
-        if (active <= centerPage) {
-            if (item >= center + 1) {
-                numberPage = numPages - (maxItems - item)
+            if (active <= centerPage) {
+                if (item >= center + 1) {
+                    numberPage = numPages - (maxItems - item)
+                }
             }
-        }
-        else if (item >= center) {
-            numberPage = active - (maxItems - item)
+            else if (item >= center) {
+                numberPage = active - (maxItems - item)
+            }
         }
         items.push(
             <Pagination.Item key={item} active={numberPage === active} onClick={() => setPage(numberPage)}>
