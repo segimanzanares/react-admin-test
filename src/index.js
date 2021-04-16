@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './layout/App';
 import axios from 'axios';
-import './index.scss';
+import './styles/index.scss';
 import configureStore from './store';
 
 window.$ = window.jQuery = require('jquery');

@@ -5,7 +5,6 @@ import { Switch } from "react-router-dom";
 import RouteWithSubRoutes from '../utils/RouteWithSubRoutes';
 
 export default function Main(props) {
-    document.getElementsByTagName('body')[0].classList = ['sidebar-mini', 'layout-fixed'];
     return (
         <div>
             <Header />

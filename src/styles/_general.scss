@@ -1,0 +1,158 @@
+
+.no-admin {
+    background: transparent;
+    margin-left: 0;
+}
+
+// dev site message
+.dev-badge {
+    background: #c00;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 10px;
+    text-align: right;
+}
+.dev-badge a {
+    color: #fff;
+    text-decoration: underline;
+    font-size: 14px;
+}
+.dev-badge a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.card-title {
+    margin-bottom: 0;
+    padding-top: 6px;
+}
+
+.main-sidebar {
+    //z-index: 1030;
+}
+#sidebar-overlay {
+    //z-index: 1020;
+}
+.error-content {
+    padding-top: 15px;
+}
+
+// Transiciones
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-active {
+    opacity: 0;
+}
+.slide-enter-active, .slide-leave-active {
+    transition: opacity 1s, transform 1s;
+}
+.slide-enter, .slide-leave-to {
+    opacity: 0;
+    transform: translateX(-30%);
+}
+
+// Modals
+.modal-open {
+    .modal-backdrop {
+        background-color: #ffffff;
+        &.show {
+            opacity: 0.4;
+        }
+    }
+    .modal-content {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .modal {
+        padding-right: 0 !important;
+        overflow-y: hidden !important;
+        .modal-body {
+            overflow-y: auto;
+        }
+    }
+    padding-right: 0 !important;
+    .dev-badge, .main-header, .main-sidebar, .content-wrapper, .main-footer {
+        -webkit-filter: blur(3px);
+        filter: blur(3px);
+    }
+}
+
+// swal2
+body.swal2-shown {
+    padding-right: 0 !important;
+    .dev-badge, .main-header, .main-sidebar, .content-wrapper, .main-footer {
+        -webkit-filter: blur(3px);
+        filter: blur(3px);
+    }
+}
+.swal2-container {
+    .swal2-confirm.btn-primary {
+        margin-right: 10px;
+    }
+    &.swal2-shown {
+        background-color: rgba(255, 255, 255, 0.4) !important;
+        .swal2-modal {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) !important;
+        }
+    }
+}
+
+.tab-content {
+    > .active:focus {
+        outline: none;
+    }
+}
+
+.sidebar-light-primary {
+    .nav-sidebar {
+        > .nav-item {
+            > .nav-link{
+                &.active {
+                    background-color: #2A4A7F;
+                }
+            }
+        }
+    }
+}
+
+#nprogress {
+    .bar {
+        z-index: 1040;
+    }
+}
+
+.text-light-blue {
+    color: #17a2b8;
+}
+
+// Scrollbar
+.os-theme-light > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
+    background: rgba(21, 21, 21, 0.4);
+}
+
+.register-page {
+    height: 100%;
+    .register-box {
+        width: 420px;
+    }
+}
+
+.bg-authorized {
+    background-color: #e6ffec !important;
+    color: #000000 !important;
+}
+.bg-refused {
+    background-color: #ffeced !important;
+    color: #000000 !important;
+}
+
+.login-box {
+    margin: 0 auto;
+    @media (max-width: 360px) {
+        width: 100%;
+        form {
+            min-width: 285px;
+        }
+    }
+}

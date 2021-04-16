@@ -1,3 +1,4 @@
+@import 'variables';
 // AdminLTE
 @import '~admin-lte/dist/css/adminlte.css';
 // Fontawesome
@@ -6,6 +7,11 @@
 @import '~admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.css';
 // toastr
 @import '~toastr/toastr';
+
+@import 'general';
+@import 'buttons';
+@import 'forms';
+@import 'tables';
 
 .navbar-nav > .user-menu > .dropdown-menu {
     margin: 0;

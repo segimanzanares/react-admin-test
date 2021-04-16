@@ -1,0 +1,130 @@
+
+.form-group {
+    label {
+        font-weight: bold;
+    }
+}
+.form-control, .custom-select {
+    &:disabled, &[readonly] {
+        background: transparent;
+        cursor: default;
+        border: none;
+        padding: 0;
+        border-bottom: 1px solid #000000;
+        border-radius: 0;
+    }
+    height: $components-height;
+}
+.ng-select {
+    height: $components-height;
+}
+.custom-select {
+    height: $components-height;
+    line-height: 1.3;
+}
+select:disabled {
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+    opacity: 1;
+    &::-ms-expand {
+        display: none;
+    }
+    &.custom-select {
+        box-shadow: none;
+        color: inherit;
+    }
+}
+.custom-switch, .ng-select {
+    &.is-invalid {
+        ~ .invalid-feedback {
+            display: block;
+        }
+    }
+}
+image-cropper {
+    &.is-invalid {
+        ~ .invalid-feedback {
+            display: block;
+        }
+    }
+}
+
+.table-filters {
+    .form-group {
+        margin-bottom: 10px;
+        > button {
+            height: $components-height;
+            padding-top: 4px;
+        }
+    }
+    label, input, .ng-select, select {
+        margin-right: 8px;
+    }
+    margin-bottom: 10px;
+    input.vs__search {
+        margin-right: 0 !important;
+    }
+}
+.invalid-feedback {
+    strong {
+        display: block;
+    }
+}
+
+.button-tooltip {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: #000000;
+    color: #ffffff;
+    display: inline-block;
+    text-align: center;
+    font-size: 12px;
+}
+
+label.btn-default {
+    font-weight: normal !important;
+    height: $components-height;
+    &.btn:not(:disabled):not(.disabled):active, &.btn:not(:disabled):not(.disabled).active {
+        box-shadow: none;
+        background-color: #dc3e45;
+        color: white;
+    }
+}
+
+.drag-zone {
+    .drop-active {
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        position: fixed;
+        z-index: 9999;
+        opacity: .6;
+        text-align: center;
+        background: #000;
+        h3 {
+            margin: -.5em 0 0;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            font-size: 40px;
+            color: #fff;
+            padding: 0;
+        }
+    }
+}
+
+
+.form-activity {
+    .ngb-tp {
+        .ngb-tp-input {
+            width: 100%;
+        }
+    }
+}
