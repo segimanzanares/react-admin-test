@@ -1,15 +1,27 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { loadUsersIfNeeded, fetchUsers } from '../../actions/users';
+import { Dropdown, Modal, Button } from 'react-bootstrap';
+import { loadUsersIfNeeded, fetchUsers, clearError } from '../../actions/users';
 import Paginator from '../../components/Paginator';
+import UserForm from './Form';
 
 const UsersList = () => {
+    let emptyUserData = {
+        first_name: null,
+        last_name: null,
+        email: null,
+        password: null,
+        role_id: null
+    }
     const [options, setOptions] = useState({
         name: null,
         email: null,
         page: 1,
         take: 20
     });
+    const [showModal, setShowModal] = useState(false);
+    const [formMode, setFormMode] = useState("create");
+    const [userData, setUserData] = useState(emptyUserData);
     const users = useSelector(store => {
         return store.users.data;
     })
@@ -36,8 +48,16 @@ const UsersList = () => {
         dispatch(fetchUsers({...options, page: page}))
     }
 
+    const handleCloseModal = () => {
+        dispatch(clearError());
+        setShowModal(false);
+    }
+
     const createUser = () => {
         console.log("Create user");
+        setFormMode("create")
+        setUserData(emptyUserData)
+        setShowModal(true)
     }
 
     const filter = () => {
@@ -141,6 +161,19 @@ const UsersList = () => {
                     </div>
                 </div>
             </section>
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{formMode === 'create' ? "Crear" : "Editar"} usuario</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <UserForm id="userForm" userData={userData} mode={formMode} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" type="submit" form="userForm">
+                        Guardar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Fragment>
     );
 }

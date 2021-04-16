@@ -90,7 +90,7 @@ export default function Header() {
                     <Modal.Title>Datos del perfil</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <UserForm id="profileForm" userData={userData} />
+                    <UserForm id="profileForm" userData={userData} mode="profile" />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" type="submit" form="profileForm">
