@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Pagination from 'react-bootstrap/Pagination'
+import PropTypes from 'prop-types'
 
 const Paginator = (props) => {
     const [active, setActive] = useState(props.page)
@@ -37,6 +38,14 @@ const Paginator = (props) => {
     return (
         <Pagination>{items}</Pagination>
     );
+}
+
+Paginator.propTypes = {
+    collectionSize: PropTypes.number.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    page: PropTypes.number.isRequired,
+    maxSize: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired
 }
 
 export default Paginator;
