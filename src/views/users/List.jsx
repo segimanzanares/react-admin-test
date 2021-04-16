@@ -142,7 +142,7 @@ const UsersList = () => {
                                                 <td>
                                                     <div className="table-button-container text-center">
                                                         <a href="#" className={'action-link ' + (user.is_active == 1 ? 'text-success' : 'text-danger')}
-                                                                onClick={() => toggleUserStatus(user)}>
+                                                                onClick={(e) => { e.preventDefault(); toggleUserStatus(user)}}>
                                                             <i className="fa fa-check"></i>
                                                         </a>
                                                         <a href="#" className="action-link text-info" onClick={(e) => { e.preventDefault(); goEditUser(user) }}>
