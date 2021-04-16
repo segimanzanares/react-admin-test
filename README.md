@@ -14,5 +14,10 @@ $ git clone git@github.com:segimanzanares/react-admin-test.git
 $ cd react-admin-test
 $ npm install
 ```
-**Configure environment**
+**Configure environment**<br>
 Copy `.env.example` to `.env` file and edit its content.
+
+**Run local server**
+```
+$ npm start
+```
