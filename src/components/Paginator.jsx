@@ -13,9 +13,27 @@ const Paginator = (props) => {
         setActive(page);
         props.onPageChange(page);
     }
+    const goTo = (action) => {
+        if (action === 'first') {
+            setPage(1)
+        }
+        else if (action === 'last') {
+            setPage(numPages)
+        }
+        else if (action === 'prev') {
+            if (active > 1) {
+                setPage(active - 1)
+            }
+        }
+        else if (action === 'next') {
+            if (active < numPages) {
+                setPage(active + 1)
+            }
+        }
+    }
     if (numPages > 1) {
-        items.push(<Pagination.First key="first" disabled={active === 1} />)
-        items.push(<Pagination.Prev key="prev" disabled={active === 1} />)
+        items.push(<Pagination.First key="first" disabled={active === 1} onClick={() => goTo('first')}/>)
+        items.push(<Pagination.Prev key="prev" disabled={active === 1} onClick={() => goTo('prev')}/>)
     }
     let centerPage = Math.ceil(numPages / 2)
     for (let item = 1; item <= maxItems; item++) {
@@ -43,8 +61,8 @@ const Paginator = (props) => {
         );
     }
     if (numPages > 1) {
-        items.push(<Pagination.Next key="next" disabled={active === numPages} />)
-        items.push(<Pagination.Last key="last" disabled={active === numPages} />)
+        items.push(<Pagination.Next key="next" disabled={active === numPages} onClick={() => goTo('next')}/>)
+        items.push(<Pagination.Last key="last" disabled={active === numPages} onClick={() => goTo('last')}/>)
     }
     return (
         <Pagination>{items}</Pagination>
