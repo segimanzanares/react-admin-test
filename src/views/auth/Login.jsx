@@ -1,47 +1,25 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory, useLocation, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import { performLogin } from '../../actions/auth';
 
 const Login = (props) => {
     const isAuthenticated = useSelector(store => {
-        console.log(store);
         return store.auth.isAuthenticated;
     })
 
     React.useEffect(() => {
-        console.log(isAuthenticated)
         if (isAuthenticated) {
             props.history.push('/home');
         }
     }, [isAuthenticated, props.history])
 
     const dispatch = useDispatch()
-    const { register, handleSubmit, errors, setError } = useForm();
-    let history = useHistory();
-    let location = useLocation();
-    let { from } = location.state || { from: { pathname: "/" } };
+    const { register, handleSubmit, errors } = useForm();
     const [errorMessage, setErrorMessage] = useState(null);
     const login = function (data) {
         dispatch(performLogin(data.email, data.password));
-        /*auth.login({
-            username: data.email,
-            password: data.password,
-            remember: data.rememberMe
-        }, () => history.replace(from), (error) => {
-            if (error.status === 401) {
-                setErrorMessage(error.data.message);
-            }
-            else if (error.status === 422) {
-                setErrorMessage(error.data.message);
-                for (var key in error.data.errors) {
-                    if (error.data.errors.hasOwnProperty(key)) {
-                        setError(key, 'validate', error.data.errors[key]);
-                    }
-                }
-            }
-        });*/
     }
     document.getElementsByTagName('body')[0].classList = ['login-page'];
     return (

@@ -55,7 +55,6 @@ const UsersList = () => {
     }
 
     const createUser = () => {
-        console.log("Create user");
         setFormMode("create")
         setUserData(emptyUserData)
         setShowModal(true)
