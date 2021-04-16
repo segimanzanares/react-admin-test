@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap';
-import { loadUsersIfNeeded, fetchUsers, performDeleteUser, clearError } from '../../actions/users';
+import { loadUsersIfNeeded, fetchUsers, performDeleteUser, performToggleUser, clearError } from '../../actions/users';
 import Paginator from '../../components/Paginator';
 import UserForm from './Form';
 import { showConfirmDialog } from '../../utils/helpers'
@@ -67,6 +67,7 @@ const UsersList = () => {
     const toggleUserStatus = (user) => {
         console.log("toggleUserStatus")
         console.log(user);
+        dispatch(performToggleUser(user))
     }
 
     const goEditUser = (user) => {
@@ -81,7 +82,7 @@ const UsersList = () => {
             msg: "¿Estas seguro de eliminar el usuario seleccionado?",
             icon: 'question',
             callback: function() {
-                dispatch(performDeleteUser(user.id))
+                dispatch(performDeleteUser(user))
             }
         });
     }
@@ -140,7 +141,8 @@ const UsersList = () => {
                                                 <td>{user.email}</td>
                                                 <td>
                                                     <div className="table-button-container text-center">
-                                                        <a href="#" className="action-link" onClick={() => toggleUserStatus(user)}>
+                                                        <a href="#" className={'action-link ' + (user.is_active == 1 ? 'text-success' : 'text-danger')}
+                                                                onClick={() => toggleUserStatus(user)}>
                                                             <i className="fa fa-check"></i>
                                                         </a>
                                                         <a href="#" className="action-link text-info" onClick={(e) => { e.preventDefault(); goEditUser(user) }}>

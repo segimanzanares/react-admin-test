@@ -11,6 +11,9 @@ import {
     DELETE_USER,
     DELETE_USER_SUCCESS,
     DELETE_USER_ERROR,
+    TOGGLE_USER,
+    TOGGLE_USER_SUCCESS,
+    TOGGLE_USER_ERROR,
     CLEAR_ERROR
 } from '../actions';
 
@@ -21,8 +24,7 @@ export const initialState = {
     error: null,
     data: [],
     creatingUser: null,
-    editingUser: null,
-    deletingUser: null,
+    selectedUser: null,
     lastAction: null
 };
 
@@ -47,22 +49,31 @@ export function reducer(
         case CREATE_USER_ERROR:
             return { ...state, error: action.error, lastAction: action.type };
         case UPDATE_USER:
-            return { ...state, editingUser: action.userData, lastAction: action.type };
+            return { ...state, selectedUser: action.userData, lastAction: action.type };
         case UPDATE_USER_SUCCESS:
-            i = state.data.findIndex((u) => u.id == state.editingUser.id);
+            i = state.data.findIndex((u) => u.id == state.selectedUser.id);
             data = [...state.data];
             data[i] = action.updatedUser;
             return { ...state, data: data, lastAction: action.type };
         case UPDATE_USER_ERROR:
             return { ...state, error: action.error, lastAction: action.type };
         case DELETE_USER:
-            return { ...state, deletingUser: action.userId, lastAction: action.type };
+            return { ...state, selectedUser: action.userData, lastAction: action.type };
         case DELETE_USER_SUCCESS:
-            i = state.data.findIndex((u) => u.id == state.deletingUser);
+            i = state.data.findIndex((u) => u.id == state.selectedUser.id);
             data = [...state.data];
             data.splice(i, 1);
             return { ...state, data: data, lastAction: action.type };
         case DELETE_USER_ERROR:
+            return { ...state, error: action.error, lastAction: action.type };
+        case TOGGLE_USER:
+            return { ...state, selectedUser: action.userData, lastAction: action.type };
+        case TOGGLE_USER_SUCCESS:
+            i = state.data.findIndex((u) => u.id == state.selectedUser.id);
+            data = [...state.data];
+            data[i].is_active = action.isActive;
+            return { ...state, data: data, lastAction: action.type };
+        case TOGGLE_USER_ERROR:
             return { ...state, error: action.error, lastAction: action.type };
         case CLEAR_ERROR:
             return { ...state, error: null, lastAction: action.type };

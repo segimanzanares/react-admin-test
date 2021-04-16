@@ -12,6 +12,9 @@ export const UPDATE_USER_ERROR = 'UPDATE_USER_ERROR'
 export const DELETE_USER = 'DELETE_USER'
 export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS'
 export const DELETE_USER_ERROR = 'DELETE_USER_ERROR'
+export const TOGGLE_USER = 'TOGGLE_USER'
+export const TOGGLE_USER_SUCCESS = 'TOGGLE_USER_SUCCESS'
+export const TOGGLE_USER_ERROR = 'TOGGLE_USER_ERROR'
 export const CLEAR_ERROR = 'CLEAR_ERROR'
 
 export function clearError() {
@@ -146,17 +149,17 @@ export function updateUserError(error) {
     }
 }
 
-export function deleteUser(userId) {
+export function deleteUser(userData) {
     return {
         type: DELETE_USER,
-        userId
+        userData
     }
 }
 
-export function performDeleteUser(userId) {
+export function performDeleteUser(userData) {
     return dispatch => {
-        dispatch(deleteUser(userId));
-        return api('delete', `/users/${userId}`)
+        dispatch(deleteUser(userData));
+        return api('delete', `/users/${userData.id}`)
             .then(response => dispatch(deleteUserSuccess(response.data.message)))
             .catch(err => dispatch(deleteUserError(err)))
     }
@@ -172,6 +175,37 @@ export function deleteUserSuccess(message) {
 export function deleteUserError(error) {
     return {
         type: DELETE_USER_ERROR,
+        error
+    }
+}
+
+export function toggleUser(userData) {
+    return {
+        type: TOGGLE_USER,
+        userData
+    }
+}
+
+export function performToggleUser(userData) {
+    return dispatch => {
+        dispatch(toggleUser(userData));
+        return api('put', `/users/${userData.id}/status`)
+            .then(response => dispatch(toggleUserSuccess(userData.is_active == 1 ? 0 : 1, response.data.message)))
+            .catch(err => dispatch(toggleUserError(err)))
+    }
+}
+
+export function toggleUserSuccess(isActive, message) {
+    window.toastr['success'](message);
+    return {
+        type: TOGGLE_USER_SUCCESS,
+        isActive
+    }
+}
+
+export function toggleUserError(error) {
+    return {
+        type: TOGGLE_USER_ERROR,
         error
     }
 }
