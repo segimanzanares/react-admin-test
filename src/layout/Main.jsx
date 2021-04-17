@@ -5,6 +5,8 @@ import { Switch } from "react-router-dom";
 import RouteWithSubRoutes from '../utils/RouteWithSubRoutes';
 
 export default function Main(props) {
+    document.getElementsByTagName('body')[0].classList.remove('login-page')
+    document.getElementsByTagName('body')[0].classList.add('hold-transition', 'sidebar-mini', 'layout-fixed')
     return (
         <div>
             <Header />

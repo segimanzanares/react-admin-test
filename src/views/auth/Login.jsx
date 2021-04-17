@@ -21,7 +21,8 @@ const Login = (props) => {
     const login = function (data) {
         dispatch(performLogin(data.email, data.password));
     }
-    document.getElementsByTagName('body')[0].classList = ['login-page'];
+    document.getElementsByTagName('body')[0].classList.remove('hold-transition', 'sidebar-mini', 'layout-fixed')
+    document.getElementsByTagName('body')[0].classList.add('login-page')
     return (
         <div className="login-box">
             <div className="login-logo">
