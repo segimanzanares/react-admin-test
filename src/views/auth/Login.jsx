@@ -13,13 +13,10 @@ const Login = (props) => {
     })
 
     React.useEffect(() => {
-        if (isAuthenticated) {
-            props.history.push('/home');
-        }
         if (authError) {
             setErrorMessage(authError.message)
         }
-    }, [isAuthenticated, authError, props.history])
+    }, [isAuthenticated, authError, props])
 
     const dispatch = useDispatch()
     const { register, handleSubmit, formState: { errors } } = useForm();
