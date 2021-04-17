@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { loadUsersIfNeeded, fetchUsers, performDeleteUser, performToggleUser, clearError } from '../../actions/users';
 import Paginator from '../../components/Paginator';
 import UserForm from './Form';
-import { showConfirmDialog } from '../../utils/helpers'
+import { showConfirmDialog, handleSort } from '../../utils/helpers'
 
 const UsersList = () => {
     let emptyUserData = {
@@ -18,7 +18,8 @@ const UsersList = () => {
         name: null,
         email: null,
         page: 1,
-        take: 20
+        take: 20,
+        sort: 'name|asc'
     });
     const [showModal, setShowModal] = useState(false);
     const [formMode, setFormMode] = useState("create");
@@ -65,8 +66,6 @@ const UsersList = () => {
     }
 
     const toggleUserStatus = (user) => {
-        console.log("toggleUserStatus")
-        console.log(user);
         dispatch(performToggleUser(user))
     }
 
@@ -85,6 +84,15 @@ const UsersList = () => {
                 dispatch(performDeleteUser(user))
             }
         });
+    }
+
+    const onSort = (sortBy, direction) => {
+        let sort = `${sortBy}|${direction}`
+        setOptions({
+            ...options,
+            sort
+        });
+        dispatch(fetchUsers({ ...options, sort }))
     }
 
     return (
@@ -128,8 +136,8 @@ const UsersList = () => {
                             <table className="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>E-mail</th>
+                                        <th sortable="name" onClick={(e) => handleSort(e, onSort)} className="asc">Nombre</th>
+                                        <th sortable="email" onClick={(e) => handleSort(e, onSort)}>E-mail</th>
                                         <th width="150" className="text-center">Acciones</th>
                                     </tr>
                                 </thead>

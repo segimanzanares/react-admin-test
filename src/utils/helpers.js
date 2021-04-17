@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2'
 
-export function showConfirmDialog(config) {
+export const showConfirmDialog = (config) => {
     var swalCfg = {
         title: config.title,
         text: config.msg,
@@ -35,4 +35,29 @@ export function showConfirmDialog(config) {
             }
         }
     }).catch(Swal.noop);
+}
+
+export const handleSort = (e, onSort) => {
+    let sortDirection = 'asc'
+    let sortBy = e.target.attributes.getNamedItem('sortable')
+    if (sortBy == null) {
+        return
+    }
+    sortBy = sortBy.value
+    let sortables = e.target.parentElement.getElementsByTagName('th')
+    if (e.target.classList.contains('asc')) {
+        sortDirection = 'desc'
+    }
+    for (let i = 0; i < sortables.length; i++) {
+        let sort = sortables[i].attributes.getNamedItem('sortable')
+        if (sort == null) {
+            continue
+        }
+        sort = sort.value
+        sortables[i].classList.remove('asc', 'desc')
+    }
+    e.target.classList.add(sortDirection)
+    if (onSort) {
+        onSort(sortBy, sortDirection)
+    }
 }
