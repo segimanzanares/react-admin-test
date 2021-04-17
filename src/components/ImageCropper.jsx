@@ -59,7 +59,7 @@ const ImageCropper = (props) => {
     }
 
     return (
-        <div className="image-cropper pt-2">
+        <div className={'image-cropper pt-2 ' + (props.hasError ? 'is-invalid' : '')}>
             <div className="text-center">
                 {
                     showCropper ?
@@ -96,6 +96,5 @@ ImageCropper.propTypes = {
     hideInput: PropTypes.bool,
     onImageCropped: PropTypes.func.isRequired,
 }
-//@Output() imageCropped: EventEmitter<ImageData> = new EventEmitter();
 
 export default ImageCropper;

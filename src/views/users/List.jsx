@@ -74,7 +74,15 @@ const UsersList = () => {
 
     const goEditUser = (user) => {
         setFormMode("edit")
-        setUserData(user)
+        setUserData({
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            password: user.password,
+            role_id: user.role_id,
+            avatar_path: user.avatar.path
+        })
         setShowModal(true)
     }
 

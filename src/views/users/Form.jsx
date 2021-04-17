@@ -18,11 +18,15 @@ export default function Form(props) {
         return store.catalogs.roles;
     })
     const [imageData, setImageData] = useState(null)
+    const { register, handleSubmit, formState: { errors }, setError, setValue, clearErrors } = useForm({
+        defaultValues: props.userData
+    });
     const selectRole = () => setValue('role_id', props.userData.role_id)
     // Load roles
     dispatch(loadCatalogRolesIfNeeded(selectRole))
 
     const onImageCropped = (imageData) => {
+        clearErrors('avatar')
         setImageData(imageData)
     }
 
@@ -30,26 +34,28 @@ export default function Form(props) {
         if (authError?.errors) {
             for (let key in authError.errors) {
                 if (authError.errors.hasOwnProperty(key)) {
-                    setError(key, 'validate', authError.errors[key]);
+                    setError(key, { type: 'validate', message: userError.errors[key] })
                 }
             }
         }
         if (userError?.errors) {
             for (let key in userError.errors) {
                 if (userError.errors.hasOwnProperty(key)) {
-                    setError(key, 'validate', userError.errors[key]);
+                    setError(key, { type: 'validate', message: userError.errors[key] })
                 }
             }
         }
-    }, [authError, userError])
-    const { register, handleSubmit, errors, setError, setValue } = useForm({
-        defaultValues: props.userData
-    });
+    }, [authError, userError, setError])
     const onSubmit = function (data) {
-        let formData = {...data}
+        let formData = { ...data }
         if (imageData && imageData.contents !== null) {
             formData.avatar = imageData
         }
+        if (formData.password != formData.password_confirmation) {
+            setError('password', { type: 'validate', message: "La confirmación del campo contraseña no coincide." })
+            return false
+        }
+        clearErrors()
         if (props.mode === "profile") {
             dispatch(performUpdateProfile(formData));
         }
@@ -63,78 +69,89 @@ export default function Form(props) {
     const { userData, closeModal, ...newProps } = props;
     return (
         <form onSubmit={handleSubmit(onSubmit)} {...newProps}>
-            {props.mode === "edit" ? <input type="hidden" name="id" ref={register()} /> : ''}
+            {props.mode === "edit" ? <input type="hidden" {...register("id")} /> : ''}
             {(['create', 'edit'].indexOf(props.mode) !== -1) ?
                 <div className="form-group">
                     <label>Rol</label>
-                    <select className={'custom-select ' + (errors.role_id ? 'is-invalid' : '')} name="role_id"
-                        ref={register({ required: true })}
+                    <select className={'custom-select ' + (errors && errors.role_id ? 'is-invalid' : '')}
+                        {...register("role_id", { required: true })}
                         autoFocus>
                         {roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)}
                     </select>
                     {
-                        errors.role_id && errors.role_id.type === 'required' &&
+                        errors && errors.role_id && errors.role_id.type === 'required' &&
                         <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
                     }
                     {
-                        errors.role_id && errors.role_id.type === 'validate' &&
+                        errors && errors.role_id && errors.role_id.type === 'validate' &&
                         <span className="invalid-feedback" role="alert"><strong>{errors.role_id.message}</strong></span>
                     }
                 </div>
                 : ''}
             <div className="form-group">
                 <label>Nombre</label>
-                <input type="text" name="first_name" autoFocus
-                    ref={register({ required: true })}
-                    className={'form-control ' + (errors.first_name ? 'is-invalid' : '')} />
+                <input type="text" autoFocus
+                    {...register("first_name", { required: true })}
+                    className={'form-control ' + (errors && errors.first_name ? 'is-invalid' : '')} />
                 {
-                    errors.first_name && errors.first_name.type === 'required' &&
+                    errors && errors.first_name && errors.first_name.type === 'required' &&
                     <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
                 }
                 {
-                    errors.first_name && errors.first_name.type === 'validate' &&
+                    errors && errors.first_name && errors.first_name.type === 'validate' &&
                     <span className="invalid-feedback" role="alert"><strong>{errors.first_name.message}</strong></span>
                 }
             </div>
             <div className="form-group">
                 <label>Apellidos</label>
-                <input type="text" name="last_name" autoFocus
-                    ref={register({ required: true })}
-                    className={'form-control ' + (errors.last_name ? 'is-invalid' : '')} />
+                <input type="text"
+                    {...register("last_name", { required: true })}
+                    className={'form-control ' + (errors && errors.last_name ? 'is-invalid' : '')} />
                 {
-                    errors.last_name && errors.last_name.type === 'required' &&
+                    errors && errors.last_name && errors.last_name.type === 'required' &&
                     <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
                 }
                 {
-                    errors.last_name && errors.last_name.type === 'validate' &&
+                    errors && errors.last_name && errors.last_name.type === 'validate' &&
                     <span className="invalid-feedback" role="alert"><strong>{errors.last_name.message}</strong></span>
                 }
             </div>
             <div className="form-group">
                 <label>E-mail</label>
-                <input type="text" name="email" autoFocus
-                    ref={register({ required: true })}
-                    className={'form-control ' + (errors.email ? 'is-invalid' : '')} />
+                <input type="text"
+                    {...register("email", { required: true })}
+                    className={'form-control ' + (errors && errors.email ? 'is-invalid' : '')} />
                 {
-                    errors.email && errors.email.type === 'required' &&
+                    errors && errors.email && errors.email.type === 'required' &&
                     <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
                 }
                 {
-                    errors.email && errors.email.type === 'validate' &&
+                    errors && errors.email && errors.email.type === 'validate' &&
                     <span className="invalid-feedback" role="alert"><strong>{errors.email.message}</strong></span>
                 }
             </div>
             <div className="form-group">
-                <label>Password</label>
-                <input type="password" name="password"
-                    className={'form-control ' + (errors.password ? 'is-invalid' : '')} />
+                <label>Contraseña</label>
+                <input type="password"
+                    {...register("password")}
+                    className={'form-control ' + (errors && errors.password ? 'is-invalid' : '')} />
                 {
-                    errors.password && errors.password.type === 'required' &&
-                    <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
+                    errors && errors.password && errors.password.type === 'validate' &&
+                    <span className="invalid-feedback" role="alert"><strong>{errors.password.message}</strong></span>
                 }
             </div>
             <div className="form-group">
-                <ImageCropper src={props.userData.avatar ? props.userData.avatar.path : ''} onImageCropped={onImageCropped} />
+                <label>Confirmar contraseña</label>
+                <input type="password" className="form-control" {...register("password_confirmation")} />
+            </div>
+            <div className="form-group">
+                <ImageCropper src={props.userData.avatar_path ? props.userData.avatar_path : ''}
+                    hasError={errors && errors.avatar ? true : false}
+                    onImageCropped={onImageCropped} />
+                {
+                    errors && errors.avatar && errors.avatar.type === 'validate' &&
+                    <span className="invalid-feedback" role="alert"><strong>{errors.avatar.message}</strong></span>
+                }
             </div>
         </form>
     );
