@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^12.7.0",
     "admin-lte": "^3.0.4",
     "axios": "^0.19.2",
+    "cropperjs": "^1.5.11",
     "node-sass": "^4.13.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.2",

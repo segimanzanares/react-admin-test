@@ -1,0 +1,34 @@
+.image-cropper {
+    .crop-wrapper {
+        width: auto !important;
+        height: 350px;
+        &.hidden {
+            visibility: hidden;
+            height: 0;
+            > img {
+                width: 0;
+                height: 0;
+            }
+        }
+        button {
+            margin-bottom: 0.5rem;
+        }
+    }
+    .img-preview {
+        //max-width: 380px;
+        &.hidden {
+            visibility: hidden;
+            height: 0;
+            > img, input {
+                width: 0 !important;
+                height: 0 !important;
+            }
+        }
+        img {
+            width: 100%;
+        }
+        .cropper-file {
+            display: none;
+        }
+    }
+}

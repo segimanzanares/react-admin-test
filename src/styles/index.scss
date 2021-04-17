@@ -7,11 +7,14 @@
 @import '~admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.css';
 // toastr
 @import '~toastr/toastr';
+// Cropperjs
+@import '~cropperjs/dist/cropper.css';
 
 @import 'general';
 @import 'buttons';
 @import 'forms';
 @import 'tables';
+@import 'image-cropper';
 
 .navbar-nav > .user-menu > .dropdown-menu {
     margin: 0;
