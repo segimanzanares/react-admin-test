@@ -8,12 +8,18 @@ const Login = (props) => {
     const isAuthenticated = useSelector(store => {
         return store.auth.isAuthenticated;
     })
+    const authError = useSelector(store => {
+        return store.auth.error;
+    })
 
     React.useEffect(() => {
         if (isAuthenticated) {
             props.history.push('/home');
         }
-    }, [isAuthenticated, props.history])
+        if (authError) {
+            setErrorMessage(authError.message)
+        }
+    }, [isAuthenticated, authError, props.history])
 
     const dispatch = useDispatch()
     const { register, handleSubmit, formState: { errors } } = useForm();
