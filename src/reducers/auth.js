@@ -37,7 +37,7 @@ export function reducer(
         case UPDATE_PROFILE:
             return { ...state, lastAction: action.type };
         case UPDATE_PROFILE_SUCCESS:
-            return { ...state, auth: {...state.auth, user: action.updatedUser}, lastAction: action.type };
+            return { ...state, auth: {...state.auth, user: action.updatedUser}, error: null, lastAction: action.type };
         case UPDATE_PROFILE_ERROR:
             return { ...state, error: action.error, lastAction: action.type };
         case CLEAR_ERROR:
