@@ -1,4 +1,5 @@
 import api from '../api';
+import { logout } from './auth';
 
 export const LOAD_USERS = 'LOAD_USERS'
 export const LOAD_USERS_SUCCESS = 'LOAD_USERS_SUCCESS'
@@ -20,6 +21,15 @@ export const CLEAR_ERROR = 'CLEAR_ERROR'
 export function clearError() {
     return {
         type: CLEAR_ERROR,
+    }
+}
+
+function handleErrors(err, callback) {
+    return (dispatch) => {
+        if (err.status === 401) {
+            return dispatch(logout())
+        }
+        return callback()
     }
 }
 
@@ -72,7 +82,7 @@ export function fetchUsers(options) {
         return api('get', '/users', options)
             .then(response => response.data)
             .then(response => dispatch(loadUsersSuccess(response.data, response.total)))
-            .catch(err => dispatch(loadUsersError(err)))
+            .catch(err => dispatch(handleErrors(err, () => dispatch(loadUsersError(err)))))
     }
 }
 
@@ -95,7 +105,7 @@ export function performCreateUser(userData) {
                 dispatch(createUserSuccess({}, response.data.message))
                 dispatch(fetchUsers({}))
             })
-            .catch(err => dispatch(createUserError(err)))
+            .catch(err => dispatch(handleErrors(err, () => dispatch(createUserError(err)))))
     }
 }
 
@@ -125,12 +135,8 @@ export function performUpdateUser(userData) {
     return dispatch => {
         dispatch(updateUser(userData));
         return api('put', `/users/${userData.id}`, userData)
-            .then(response => {
-                console.log(response.data);
-                return response;
-            })
             .then(response => dispatch(updateUserSuccess(response.data.data, response.data.message)))
-            .catch(err => dispatch(updateUserError(err)))
+            .catch(err => dispatch(handleErrors(err, () => dispatch(updateUserError(err)))))
     }
 }
 
@@ -161,7 +167,7 @@ export function performDeleteUser(userData) {
         dispatch(deleteUser(userData));
         return api('delete', `/users/${userData.id}`)
             .then(response => dispatch(deleteUserSuccess(response.data.message)))
-            .catch(err => dispatch(deleteUserError(err)))
+            .catch(err => dispatch(handleErrors(err, () => dispatch(deleteUserError(err)))))
     }
 }
 
@@ -191,7 +197,7 @@ export function performToggleUser(userData) {
         dispatch(toggleUser(userData));
         return api('put', `/users/${userData.id}/status`)
             .then(response => dispatch(toggleUserSuccess(userData.is_active == 1 ? 0 : 1, response.data.message)))
-            .catch(err => dispatch(toggleUserError(err)))
+            .catch(err => dispatch(handleErrors(err, () => dispatch(toggleUserError(err)))))
     }
 }
 
