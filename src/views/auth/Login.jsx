@@ -16,7 +16,7 @@ const Login = (props) => {
     }, [isAuthenticated, props.history])
 
     const dispatch = useDispatch()
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [errorMessage, setErrorMessage] = useState(null);
     const login = function (data) {
         dispatch(performLogin(data.email, data.password));
@@ -40,8 +40,8 @@ const Login = (props) => {
                         <div className="form-group">
                             <label>E-mail</label>
                             <div className="input-group mb-3">
-                                <input type="text" name="email" autoFocus
-                                    ref={register({ required: true })}
+                                <input type="text" autoFocus
+                                    {...register("email", { required: true })}
                                     className={'form-control ' + (errors.email ? 'is-invalid' : '')} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
@@ -61,8 +61,8 @@ const Login = (props) => {
                         <div className="form-group">
                             <label>Password</label>
                             <div className="input-group mb-3">
-                                <input type="password" name="password"
-                                    ref={register({ required: true })}
+                                <input type="password"
+                                    {...register("password", { required: true })}
                                     className={'form-control ' + (errors.password ? 'is-invalid' : '')} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
@@ -78,9 +78,9 @@ const Login = (props) => {
                         <div className="row">
                             <div className="col-8">
                                 <div className="icheck-primary">
-                                    <input type="checkbox" id="remember" name="rememberMe" ref={register} />
+                                    <input type="checkbox" id="remember" {...register("remember_me")} />
                                     <label htmlFor="remember">
-                                        Remember Me
+                                        Recuérdame
                                     </label>
                                 </div>
                             </div>
