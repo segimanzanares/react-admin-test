@@ -21,6 +21,9 @@ const UsersList = () => {
         take: 20,
         sort: 'name|asc'
     });
+    const modalBodyStyle = {
+        maxHeight: window.innerHeight - 200
+    }
     const [showModal, setShowModal] = useState(false);
     const [formMode, setFormMode] = useState("create");
     const [userData, setUserData] = useState(emptyUserData);
@@ -184,7 +187,7 @@ const UsersList = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>{formMode === 'create' ? "Crear" : "Editar"} usuario</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={modalBodyStyle}>
                     <UserForm id="userForm" userData={userData} mode={formMode} />
                 </Modal.Body>
                 <Modal.Footer>

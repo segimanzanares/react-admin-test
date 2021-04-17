@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { performUpdateProfile } from '../../actions/auth';
 import { performCreateUser, performUpdateUser } from '../../actions/users';
 import { loadCatalogRolesIfNeeded } from '../../actions/catalogs';
+import ImageCropper from '../../components/ImageCropper'
 
 export default function Form(props) {
     const dispatch = useDispatch()
@@ -16,9 +17,14 @@ export default function Form(props) {
     const roles = useSelector(store => {
         return store.catalogs.roles;
     })
+    const [imageData, setImageData] = useState(null)
     const selectRole = () => setValue('role_id', props.userData.role_id)
     // Load roles
     dispatch(loadCatalogRolesIfNeeded(selectRole))
+
+    const onImageCropped = (imageData) => {
+        setImageData(imageData)
+    }
 
     React.useEffect(() => {
         if (authError?.errors) {
@@ -40,14 +46,18 @@ export default function Form(props) {
         defaultValues: props.userData
     });
     const onSubmit = function (data) {
+        let formData = {...data}
+        if (imageData && imageData.contents !== null) {
+            formData.avatar = imageData
+        }
         if (props.mode === "profile") {
-            dispatch(performUpdateProfile(data));
+            dispatch(performUpdateProfile(formData));
         }
         else if (props.mode === "create") {
-            dispatch(performCreateUser(data));
+            dispatch(performCreateUser(formData));
         }
         else if (props.mode === "edit") {
-            dispatch(performUpdateUser(data));
+            dispatch(performUpdateUser(formData));
         }
     }
     const { userData, closeModal, ...newProps } = props;
@@ -60,7 +70,7 @@ export default function Form(props) {
                     <select className={'custom-select ' + (errors.role_id ? 'is-invalid' : '')} name="role_id"
                         ref={register({ required: true })}
                         autoFocus>
-                        {roles.map(role => <option key={role.id} value={role.id}>{ role.name }</option>)}
+                        {roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)}
                     </select>
                     {
                         errors.role_id && errors.role_id.type === 'required' &&
@@ -71,7 +81,7 @@ export default function Form(props) {
                         <span className="invalid-feedback" role="alert"><strong>{errors.role_id.message}</strong></span>
                     }
                 </div>
-            : ''}
+                : ''}
             <div className="form-group">
                 <label>Nombre</label>
                 <input type="text" name="first_name" autoFocus
@@ -122,6 +132,9 @@ export default function Form(props) {
                     errors.password && errors.password.type === 'required' &&
                     <span className="invalid-feedback" role="alert"><strong>Please fill this field.</strong></span>
                 }
+            </div>
+            <div className="form-group">
+                <ImageCropper src={props.userData.avatar ? props.userData.avatar.path : ''} onImageCropped={onImageCropped} />
             </div>
         </form>
     );
