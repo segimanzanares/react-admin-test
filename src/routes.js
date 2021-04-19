@@ -1,5 +1,7 @@
 import Main from './layout/Main';
 import Login from './views/auth/Login';
+import ForgotPassword from './views/auth/ForgotPassword';
+import ResetPassword from './views/auth/ResetPassword';
 import NoMatch from './views/errors/NoMatch';
 import Home from './views/Home';
 import UsersList from './views/users/List';
@@ -10,6 +12,18 @@ const routes = [
         exact: true,
         secureInnerRoute: true,
         component: Login
+    },
+    {
+        path: "/password/reset/:token",
+        exact: true,
+        secureInnerRoute: true,
+        component: ResetPassword
+    },
+    {
+        path: "/password/reset",
+        exact: true,
+        secureInnerRoute: true,
+        component: ForgotPassword
     },
     {
         path: "*",

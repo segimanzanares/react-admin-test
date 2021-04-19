@@ -34,7 +34,7 @@ export default function Form(props) {
         if (authError?.errors) {
             for (let key in authError.errors) {
                 if (authError.errors.hasOwnProperty(key)) {
-                    setError(key, { type: 'validate', message: userError.errors[key] })
+                    setError(key, { type: 'validate', message: authError.errors[key] })
                 }
             }
         }

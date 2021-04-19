@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import { performLogin } from '../../actions/auth';
 
@@ -92,6 +92,9 @@ const Login = (props) => {
                                 <button type="submit" className="btn btn-primary btn-block">Login</button>
                             </div>
                         </div>
+                        <p className="mb-1">
+                            <Link to="/password/reset">Olvidé mi contraseña</Link>
+                        </p>
                     </form>
                 </div>
             </div>
