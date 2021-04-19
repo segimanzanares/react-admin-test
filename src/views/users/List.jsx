@@ -1,10 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap';
+import { useLocation, useHistory } from 'react-router-dom';
 import { loadUsersIfNeeded, fetchUsers, performDeleteUser, performToggleUser, clearError } from '../../actions/users';
 import Paginator from '../../components/Paginator';
 import UserForm from './Form';
 import { showConfirmDialog, handleSort } from '../../utils/helpers'
+import api from '../../api'
 
 const UsersList = () => {
     let emptyUserData = {
@@ -34,8 +36,24 @@ const UsersList = () => {
         return store.users.total;
     })
     const dispatch = useDispatch()
+    const location = useLocation()
+    const history = useHistory()
     React.useEffect(() => {
         dispatch(loadUsersIfNeeded())
+        if (/\/users\/[0-9]+$/.test(location.pathname)) {
+            let userId = location.pathname.replace("/users/", "")
+            if (users && users.length > 0) {
+                // Buscar record
+                let u = users.filter(r => r.id == userId)
+                if (u.length > 0) {
+                    editUser(u[0])
+                }
+            }
+            else {
+                api('get', `/users/${userId}`)
+                    .then(r => editUser(r.data))
+            }
+        }
     }, [])
 
     const handleInputChange = (event) => {
@@ -56,6 +74,7 @@ const UsersList = () => {
     const handleCloseModal = () => {
         dispatch(clearError());
         setShowModal(false);
+        history.push("/users")
     }
 
     const createUser = () => {
@@ -73,6 +92,10 @@ const UsersList = () => {
     }
 
     const goEditUser = (user) => {
+        history.push(`/users/${user.id}`)
+    }
+
+    const editUser = (user) => {
         setFormMode("edit")
         setUserData({
             id: user.id,
@@ -81,7 +104,7 @@ const UsersList = () => {
             email: user.email,
             password: user.password,
             role_id: user.role_id,
-            avatar_path: user.avatar.path
+            avatar_path: user.avatar?.path
         })
         setShowModal(true)
     }
@@ -91,7 +114,7 @@ const UsersList = () => {
             title: "Eliminar usuario",
             msg: "¿Estas seguro de eliminar el usuario seleccionado?",
             icon: 'question',
-            callback: function() {
+            callback: function () {
                 dispatch(performDeleteUser(user))
             }
         });
@@ -161,7 +184,7 @@ const UsersList = () => {
                                                 <td>
                                                     <div className="table-button-container text-center">
                                                         <a href="#" className={'action-link ' + (user.is_active == 1 ? 'text-success' : 'text-danger')}
-                                                                onClick={(e) => { e.preventDefault(); toggleUserStatus(user)}}>
+                                                            onClick={(e) => { e.preventDefault(); toggleUserStatus(user) }}>
                                                             <i className="fa fa-check"></i>
                                                         </a>
                                                         <a href="#" className="action-link text-info" onClick={(e) => { e.preventDefault(); goEditUser(user) }}>

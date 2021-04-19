@@ -33,6 +33,11 @@ const routes = [
                 component: UsersList
             },
             {
+                path: "/users/:id",
+                exact: true,
+                component: UsersList
+            },
+            {
                 path: "/*",
                 component: NoMatch
             }
