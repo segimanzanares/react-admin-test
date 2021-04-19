@@ -74,7 +74,7 @@ const UsersList = () => {
     const handleCloseModal = () => {
         dispatch(clearError());
         setShowModal(false);
-        history.push("/users")
+        history.goBack();
     }
 
     const createUser = () => {
