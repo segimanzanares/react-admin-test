@@ -35,7 +35,7 @@ const ForgotPassword = () => {
     return (
         <div className="login-box">
             <div className="login-logo">
-                <div><img src="assets/img/logo.png" alt="Logo"/></div>
+                <img src="/logo192.png" alt="Logo" />
             </div>
             <div className="card">
                 <div className="card-body login-card-body">
